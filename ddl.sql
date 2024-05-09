@@ -6,10 +6,6 @@ CREATE TABLE pais (
     nombre_pais VARCHAR(20)
 );
 
-CREATE TABLE region (
-    id_region INT(5) PRIMARY KEY,
-    nombre_region VARCHAR(30)
-);
 
 CREATE TABLE ciudad (
     id_ciudad INT(5) PRIMARY KEY,
