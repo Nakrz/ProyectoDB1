@@ -26,7 +26,6 @@
 | producto                         |
 | proveedor                        |
 | puesto                           |
-| region                           |
 | stock                            |
 +----------------------------------+
 ```
