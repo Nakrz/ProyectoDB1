@@ -11,13 +11,6 @@ INSERT INTO pais (id_pais, nombre_pais) VALUES
 (5, 'Reino Unido');
 
 
-INSERT INTO region (id_region, nombre_region) VALUES
-(1, 'Madrid'),
-(2, 'París'),
-(3, 'Berlín'),
-(4, 'Roma'),
-(5, 'Londres');
-
 
 INSERT INTO ciudad (id_ciudad, nombre_ciudad, codigo_postal, id_pais) VALUES
 (1, 'Madrid', '28001', 1),
