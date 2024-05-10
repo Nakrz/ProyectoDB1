@@ -1,34 +1,10 @@
-# GARDEN
+# GARDEN Base de datos 1
+
+## DER:
 
 
+![Texto alternativo](./DER01.png)
 
-
-
-```sql
-
-+----------------------------------+
-| Tables_in_garden                 |
-+----------------------------------+
-| ciudad                           |
-| cliente                          |
-| detalle_pedido                   |
-| dimensiones                      |
-| direccion                        |
-| empleado                         |
-| estado_pedido                    |
-| forma_pago                       |
-| gama_producto                    |
-| jefe                             |
-| oficina                          |
-| pago                             |
-| pais                             |
-| pedido                           |
-| producto                         |
-| proveedor                        |
-| puesto                           |
-| stock                            |
-+----------------------------------+
-```
 
 
 
@@ -2506,4 +2482,368 @@ Con operadores básicos de comparación
        +-----------+--------------+---------------------------------------------+------------+------------------------+---------+-----------+
        ```
 
+       # PROCEDIMIENTOS ALMACENADOS
        
+       1. Procedimiento para crear un nuevo cliente
+       
+          ```sql
+          DELIMITER //
+          
+          CREATE PROCEDURE CrearCliente(
+              IN id_cliente INT,
+              IN nombre_cliente VARCHAR(50),
+              IN nombre_contacto VARCHAR(30),
+              IN apellido_contacto VARCHAR(30),
+              IN fax VARCHAR(15),
+              IN telefono VARCHAR(15),
+              IN id_ciudad INT,
+              IN id_direccion INT,
+              IN id_empleado_rep_ventas INT,
+              IN limite_credito DECIMAL(15,2)
+          )
+          BEGIN
+              INSERT INTO cliente (
+                  id_cliente,
+                  nombre_cliente,
+                  nombre_contacto,
+                  apellido_contacto,
+                  fax,
+                  telefono,
+                  id_ciudad,
+                  id_direccion,
+                  id_empleado_rep_ventas,
+                  limite_credito
+              ) VALUES ( id_cliente,  nombre_cliente, nombre_contacto, apellido_contacto, fax, telefono, id_ciudad, id_direccion, id_empleado_rep_ventas, limite_credito);
+          END //
+          DELIMITER ;
+          
+          CALL CrearCliente(50, 'CLIENTE X', 'JOEL', 'MILLER', '123456', '789-123-456', 1, 1, 103, 500.00);
+          
+          
+          +------------+----------------+-----------------+-------------------+---------+-------------+-----------+--------------+------------------------+----------------+
+          | id_cliente | nombre_cliente | nombre_contacto | apellido_contacto  | fax     | telefono    | id_ciudad | id_direccion | id_empleado_rep_ventas | limite_credito |
+          +------------+----------------+-----------------+-------------------+---------+-------------+-----------+--------------+------------------------+----------------+
+          | 50         | CLIENTE X      | JOEL            | MILLER            | 123456  | 789-123-456 | 1         | 1            | 103                    | 500.00         |
+          +------------+----------------+-----------------+-------------------+---------+-------------+-----------+--------------+------------------------+----------------+
+          
+          ```
+       
+          
+       
+       2. Procedimiento para actualizar datos de un cliente
+       
+          ```sql
+          DELIMITER //
+          
+          CREATE PROCEDURE actualizarCliente(
+              IN idCliente INT,
+              IN nuevo_nombre_cliente VARCHAR(50),
+              IN nuevo_nombre_contacto VARCHAR(30),
+              IN nuevo_apellido_contacto VARCHAR(30),
+              IN nuevo_fax VARCHAR(15),
+              IN nuevo_telefono VARCHAR(15),
+              IN nuevo_id_ciudad INT,
+              IN nuevo_id_direccion INT,
+              IN nuevo_id_empleado_rep_ventas INT,
+              IN nuevo_limite_credito DECIMAL(15,2)
+          )
+          BEGIN
+              UPDATE cliente 
+              SET nombre_cliente = nuevo_nombre_cliente,
+                  nombre_contacto = nuevo_nombre_contacto,
+                  apellido_contacto = nuevo_apellido_contacto,
+                  fax = nuevo_fax,
+                  telefono = nuevo_telefono,
+                  id_ciudad = nuevo_id_ciudad,
+                  id_direccion = nuevo_id_direccion,
+                  id_empleado_rep_ventas = nuevo_id_empleado_rep_ventas,
+                  limite_credito = nuevo_limite_credito
+              WHERE id_cliente = idCliente;
+          END //
+          
+          DELIMITER ;
+          
+          CALL actualizarCliente(49, 'CLIENTE Z', 'JORGE', 'SALVAJE', '345246', '444-2123-4562', 2, 3, 4, 1000.00);
+          
+          | id_cliente | nombre_cliente | nombre_contacto | apellido_contacto |     fax     |   telefono   | id_ciudad | id_direccion | id_empleado_rep_ventas | limite_credito |
+          |------------|----------------|----------------|------------------|------------|--------------|-----------|--------------|-----------------------|----------------|
+          |     49     |   CLIENTE Z    |     JORGE      |     SALVAJE      |   345246   | 444-2123-4562 |     2     |       3      |           4           |     1000.00    |
+          
+          ```
+       
+          
+       
+       3. Procedimiento para eliminar un cliente
+       
+          ```sql
+          DELIMITER //
+          
+          CREATE PROCEDURE EliminarCliente(
+              IN idCliente INT
+          )
+          BEGIN
+              DELETE FROM cliente WHERE id_cliente = idCliente;
+          END //
+          
+          DELIMITER ;
+          
+          CALL EliminarCliente(10);
+          
+          +------------+----------------+-----------------+-------------------+--------------+--------------+
+          | id_cliente | nombre_cliente | nombre_contacto | apellido_contacto | fax          | telefono     |
+          +------------+----------------+-----------------+-------------------+--------------+--------------+
+          |          1 | Cliente A      | Juan            | Pérez             | 123-456-7890 | 123-456-7890 |
+          |          2 | Cliente B      | María           | Gómez             | 987-654-3210 | 987-654-3210 |
+          |          3 | Cliente C      | Pedro           | Rodríguez         | 111-222-3333 | 111-222-3333 |
+          |          4 | Cliente D      | Ana             | López             | 444-555-6666 | 444-555-6666 |
+          |          5 | Cliente E      | Carlos          | Martínez          | 777-888-9999 | 777-888-9999 |
+          |          6 | Cliente F      | Laura           | Fernández         | 000-111-2222 | 000-111-2222 |
+          |          7 | Cliente G      | Javier          | Sánchez           | 023-521-2122 | 120-111-2222 |
+          |          8 | Cliente H      | Yunikua         | Falcon            | 563-474-5845 | 333-444-5555 |
+          |          9 | Cliente I      | Chin            | Orozco            | 323-454-1255 | 300-404-5555 |
+          +------------+----------------+-----------------+-------------------+--------------+--------------+
+          ```
+       
+          
+       
+       4. Procedimiento para buscar un cliente por su ID
+       
+          ```sql
+          DELIMITER //
+          
+          CREATE PROCEDURE buscarCliente(
+              IN idCliente INT
+          )
+          BEGIN
+              SELECT id_cliente, nombre_cliente, nombre_contacto, apellido_contacto, fax, telefono, id_ciudad, id_direccion, id_empleado_rep_ventas, limite_credito
+              FROM cliente
+              WHERE id_cliente = idCliente;
+          END //
+          
+          DELIMITER ;
+          
+          
+          CALL buscarCliente(3);
+          
+          +------------+----------------+-----------------+-------------------+--------------+--------------+------------------------+----------------+
+          | id_cliente | nombre_cliente | nombre_contacto | apellido_contacto | fax          | telefono     | id_empleado_rep_ventas | limite_credito |
+          +------------+----------------+-----------------+-------------------+--------------+--------------+------------------------+----------------+
+          |          3 | Cliente C      | Pedro           | Rodríguez         | 111-222-3333 | 111-222-3333 |                    105 |       20000.00 |
+          +------------+----------------+-----------------+-------------------+--------------+--------------+------------------------+----------------+
+          ```
+       
+          
+       
+       5. Procedimiento para ver clientes
+       
+          ```sql
+          DELIMITER $$
+          CREATE PROCEDURE verClientes ()
+          BEGIN
+            SELECT id_cliente as "Id Cliente", nombre_cliente as "Cliente", nombre_contacto as "Nombre cliente", apellido_contacto AS "Apellido cliente"
+            FROM cliente;
+          END $$
+          
+          CALL verClientes();
+          
+          +------------+-----------+----------------+------------------+
+          | Id Cliente | Cliente   | Nombre cliente | Apellido cliente |
+          +------------+-----------+----------------+------------------+
+          |          1 | Cliente A | Juan           | Pérez            |
+          |          2 | Cliente B | María          | Gómez            |
+          |          3 | Cliente C | Pedro          | Rodríguez        |
+          |          4 | Cliente D | Ana            | López            |
+          |          5 | Cliente E | Carlos         | Martínez         |
+          |          6 | Cliente F | Laura          | Fernández        |
+          |          7 | Cliente G | Javier         | Sánchez          |
+          |          8 | Cliente H | Yunikua        | Falcon           |
+          |          9 | Cliente I | Chin           | Orozco           |
+          |         10 | Cliente J | Jezabel        | Nobu             |
+          +------------+-----------+----------------+------------------+
+          ```
+       
+          
+       
+       6. Procedimiento para actualizar datos de un producto
+       
+          ```sql
+          DELIMITER //
+          
+          CREATE PROCEDURE actualizarProducto(
+              IN idProducto VARCHAR(15),
+              IN nuevo_nombre_producto VARCHAR(70),
+              IN nueva_gama VARCHAR(50),
+              IN nuevo_id_dimensiones INT,
+              IN nuevo_id_proveedor VARCHAR(50),
+              IN nueva_descripcion TEXT,
+              IN nueva_cantidad_stock SMALLINT,
+              IN nuevo_precio_venta DECIMAL(15,2),
+              IN nuevo_precio_proveedor DECIMAL(15,2)
+          )
+          BEGIN
+              UPDATE producto 
+              SET nombre = nuevo_nombre_producto,
+                  gama = nueva_gama,
+                  id_dimensiones = nuevo_id_dimensiones,
+                  id_proveedor = nuevo_id_proveedor,
+                  descripcion = nueva_descripcion,
+                  cantidad_en_stock = nueva_cantidad_stock,
+                  precio_venta = nuevo_precio_venta,
+                  precio_proveedor = nuevo_precio_proveedor
+              WHERE id_producto = idProducto;
+          
+              SELECT 'Producto actualizado' AS mensaje;
+          END //
+          
+          DELIMITER ;
+          
+          CALL actualizarProducto('PROD49', 'Helicoptero Apache', 'Aviacion', 2, 'S1000', 'El mejor del mundo', 10, 150.00, 120.00);
+          
+          
+          | id_producto | nombre_producto     | gama       | id_dimensiones | id_proveedor | descripcion                  | cantidad_en_stock | precio_venta | precio_proveedor |
+          |-------------|---------------------|------------|----------------|--------------|------------------------------|------------------|--------------|-----------------|
+          | PROD49      | Helicóptero Apache  | Aviacion   | 2              | S1000        | El mejor del mundo           | 10               | 150.00       | 120.00          |
+          
+          ```
+       
+          
+       
+       7. Procedimiento para eliminar un producto
+       
+          ```sql
+          DELIMITER //
+          
+          CREATE PROCEDURE eliminarProducto(
+              IN idProducto VARCHAR(15)
+          )
+          BEGIN
+              DELETE FROM detalle_pedido WHERE id_producto = idProducto;
+              DELETE FROM producto WHERE id_producto = idProducto;
+          END //
+          
+          DELIMITER ;
+          
+          CALL eliminarProducto('PROD4');
+          
+          +-------------+---------------------------+--------------+----------------+--------------+------------------------------------------------------+-------------------+--------------+------------------+
+          | id_producto | nombre                    | gama         | id_dimensiones | id_proveedor | descripcion                                          | cantidad_en_stock | precio_venta | precio_proveedor |
+          +-------------+---------------------------+--------------+----------------+--------------+------------------------------------------------------+-------------------+--------------+------------------+
+          | PROD1       | Lámpara de Mesa           | Iluminación  |              1 | PROV1        | Lámpara de mesa con diseño moderno.                  |               100 |        70.00 |            55.00 |
+          | PROD10      | Teléfono Inteligente      | Electrónica  |              7 | PROV7        | Teléfono inteligente de última generación.           |               200 |       500.00 |           400.00 |
+          | PROD11      | Robot de Cocina           | Cocina       |              8 | PROV8        | Robot de cocina multifunción.                        |               100 |       250.00 |           200.00 |
+          | PROD12      | Set de Construcción       | Juguetes     |              9 | PROV9        | Set de construcción para niños.                      |               300 |        30.00 |            25.00 |
+          | PROD13      | Salpicon                  | Frutales     |             10 | PROV10       | Salpicon deportivo de alta calidad.                  |               150 |        40.00 |            30.00 |
+          | PROD14      | Zapatos de Cuero          | Calzado      |             11 | PROV11       | Zapatos de cuero elegantes y duraderos.              |                80 |       120.00 |            90.00 |
+          | PROD15      | Auriculares Inalámbricos  | Electrónica  |              7 | PROV7        | Auriculares inalámbricos con cancelación de ruido.   |               120 |       150.00 |           120.00 |
+          | PROD16      | Sartén Antiadherente      | Cocina       |              8 | PROV8        | Sartén antiadherente de alta resistencia.            |               200 |        35.00 |            25.00 |
+          | PROD17      | Muñeca de Peluche         | Juguetes     |              9 | PROV9        | Muñeca de peluche suave y adorable.                  |               250 |        20.00 |            15.00 |
+          | PROD18      | Piña                      | Frutales     |             10 | PROV10       | Piña de estilo moderno.                              |               100 |        60.00 |            45.00 |
+          | PROD19      | Botas de Montaña          | Calzado      |             11 | PROV11       | Botas de montaña resistentes al agua.                |                70 |        80.00 |            65.00 |
+          | PROD2       | Figura Decorativa         | Decoración   |              2 | PROV2        | Figura decorativa para el hogar.                     |               150 |        90.00 |            75.00 |
+          | PROD20      | Cámara Digital            | Electrónica  |              7 | PROV7        | Cámara digital compacta de alta resolución.          |               180 |       300.00 |           250.00 |
+          | PROD3       | Reloj de Pared            | Relojes      |              3 | PROV3        | Reloj de pared con estilo clásico.                   |               120 |       110.00 |            95.00 |
+          | PROD5       | Cuadro Moderno            | Ornamentales |              2 | PROV2        | Cuadro decorativo con estilo moderno.                |               150 |        80.00 |            65.00 |
+          | PROD6       | Lámpara de Pie            | Ornamentales |              3 | PROV3        | Lámpara de Pie con diseño contemporáneo.             |               150 |       120.00 |            95.00 |
+          | PROD7       | Guitarra Acústica         | Música       |              4 | PROV4        | Guitarra acústica para músicos profesionales.        |                70 |       400.00 |           300.00 |
+          | PROD8       | Mesa de Comedor           | Muebles      |              5 | PROV5        | Mesa de comedor extensible en madera de roble.       |                90 |       700.00 |           500.00 |
+          | PROD9       | Telescopio Astronómico    | Ciencia      |              6 | PROV6        | Telescopio para aficionados a la astronomía.         |               120 |       300.00 |           200.00 |
+          +-------------+---------------------------+--------------+----------------+--------------+------------------------------------------------------+-------------------+--------------+------------------+
+          
+          
+          
+          ```
+       
+          
+       
+       8. Procedimiento para buscar un producto por su ID
+       
+          ```sql
+          DELIMITER //
+          
+          CREATE PROCEDURE buscarProducto(
+              IN idProducto VARCHAR(15)
+          )
+          BEGIN
+              SELECT id_producto, nombre, gama, id_dimensiones, id_proveedor, descripcion, cantidad_en_stock, precio_venta, precio_proveedor
+              FROM producto
+              WHERE id_producto = idProducto;
+          END //
+          
+          DELIMITER ;
+          
+          
+          CALL buscarProducto('PROD11');
+          
+          +-------------+-----------------+--------+----------------+--------------+--------------------------------+-------------------+--------------+------------------+
+          | id_producto | nombre          | gama   | id_dimensiones | id_proveedor | descripcion                    | cantidad_en_stock | precio_venta | precio_proveedor |
+          +-------------+-----------------+--------+----------------+--------------+--------------------------------+-------------------+--------------+------------------+
+          | PROD11      | Robot de Cocina | Cocina |              8 | PROV8        | Robot de cocina multifunción.  |               100 |       250.00 |           200.00 |
+          +-------------+-----------------+--------+----------------+--------------+--------------------------------+-------------------+--------------+------------------+
+          ```
+       
+          
+       
+       9. Procedimiento para crear una nueva ciudad
+       
+          ```sql
+          DELIMITER //
+          
+          CREATE PROCEDURE crearCiudad(
+              IN idCiudad INT,
+              IN nombreCiudad VARCHAR(20),
+              IN codigoPostal VARCHAR(10),
+              IN idPais INT
+          )
+          BEGIN
+              INSERT INTO ciudad (id_ciudad, nombre_ciudad, codigo_postal, id_pais)
+              VALUES (idCiudad, nombreCiudad, codigoPostal, idPais);
+              SELECT 'La ciudad ha sido creada.' AS mensaje;
+          END //
+          
+          DELIMITER ;
+          
+          CALL crearCiudad(11, 'Bagdag', '10001', 1);
+          
+          +---------------------------+
+          | mensaje                   |
+          +---------------------------+
+          | La ciudad ha sido creada. |
+          +---------------------------+
+          ```
+       
+          
+       
+       10. Procedimiento para actualizar datos de una ciudad
+       
+           ```sql
+           DELIMITER //
+           
+           CREATE PROCEDURE actualizarCiudad(
+               IN idCiudad INT,
+               IN nuevo_nombre_ciudad VARCHAR(20),
+               IN nuevo_codigo_postal VARCHAR(10),
+               IN nuevo_id_pais INT
+           )
+           BEGIN
+               UPDATE ciudad 
+               SET nombre_ciudad = nuevo_nombre_ciudad,
+                   codigo_postal = nuevo_codigo_postal,
+                   id_pais = nuevo_id_pais
+               WHERE id_ciudad = idCiudad;
+           
+               SELECT 'Ciudad actualizada' AS mensaje;
+           END //
+           
+           DELIMITER ;
+           
+           CALL actualizarCiudad(2, 'Sevilla', '48001', 1);
+           
+           
+           +--------------------+
+           | mensaje            |
+           +--------------------+
+           | Ciudad actualizada |
+           +--------------------+
+           ```
+           
+           
