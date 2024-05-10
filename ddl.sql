@@ -174,6 +174,3 @@ CREATE TABLE detalle_pedido (
     CONSTRAINT FK_id_pedido_detalle FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido),
     CONSTRAINT FK_id_producto_detalle FOREIGN KEY (id_producto) REFERENCES producto(id_producto)
 );
-    CONSTRAINT FK_id_pedido_detalle FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido),
-    CONSTRAINT FK_id_producto_detalle FOREIGN KEY (id_producto) REFERENCES producto(id_producto)
-);
