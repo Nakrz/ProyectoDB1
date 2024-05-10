@@ -1,16 +1,9 @@
---Insercion de datos
-
-
-
-
 INSERT INTO pais (id_pais, nombre_pais) VALUES
 (1, 'España'),
 (2, 'Francia'),
 (3, 'Alemania'),
 (4, 'Italia'),
 (5, 'Reino Unido');
-
-
 
 INSERT INTO ciudad (id_ciudad, nombre_ciudad, codigo_postal, id_pais) VALUES
 (1, 'Madrid', '28001', 1),
