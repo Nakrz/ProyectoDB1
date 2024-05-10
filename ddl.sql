@@ -1,10 +1,8 @@
---Creacion de tablas
-
-
 CREATE TABLE pais (
     id_pais INT(5) PRIMARY KEY,
-    nombre_pais VARCHAR(20)
+    nombre_pais VARCHAR(50)
 );
+
 
 CREATE TABLE ciudad (
     id_ciudad INT(5) PRIMARY KEY,
