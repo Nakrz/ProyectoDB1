@@ -6,7 +6,6 @@ CREATE TABLE pais (
     nombre_pais VARCHAR(20)
 );
 
-
 CREATE TABLE ciudad (
     id_ciudad INT(5) PRIMARY KEY,
     nombre_ciudad VARCHAR(20),
@@ -172,6 +171,9 @@ CREATE TABLE detalle_pedido (
     cantidad INT(11),
     precio_unidad DECIMAL(15,2),
     numero_linea INT(6),
+    CONSTRAINT FK_id_pedido_detalle FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido),
+    CONSTRAINT FK_id_producto_detalle FOREIGN KEY (id_producto) REFERENCES producto(id_producto)
+);
     CONSTRAINT FK_id_pedido_detalle FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido),
     CONSTRAINT FK_id_producto_detalle FOREIGN KEY (id_producto) REFERENCES producto(id_producto)
 );
